@@ -1,8 +1,10 @@
 package com.example.juansantiagoacev.uniandessatt;
 
+import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
@@ -13,15 +15,18 @@ public interface APIService {
 
     public String baseUrl = "https://uniandes-satt.herokuapp.com";
 
-    @GET("/eventos")
+    @GET("eventos")
     Call<List<Evento>> loadEventos();
 
-    @GET("/sensores")
+    @GET("sensores")
     Call<List<Sensor>> loadSensores();
 
-    @GET("/alertas")
+    @GET("alertas")
     Call<List<Alerta>> loadAlertas();
 
-    @POST("/eventos")
+    @POST("eventos")
     Call<Evento> postEvento();
+
+    @POST("auth")
+    Call<String> login(@Body HashMap<String, String> json);
 }

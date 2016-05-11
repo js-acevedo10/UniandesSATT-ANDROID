@@ -1,14 +1,22 @@
 package com.example.juansantiagoacev.uniandessatt;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -29,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         login_button_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("CLIC", "BOTON");
                 submitForm();
             }
         });
@@ -60,38 +69,39 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void submitForm() {
+
         String email = login_input_email.getText().toString().trim();
         String password = login_input_password.getText().toString();
         if(validateEmail(email) && validatePassword(password)) {
-            Toast.makeText(this, "Bien", Toast.LENGTH_LONG).show();
-        }
-    }
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("https://uniandes-sattjs.herokuapp.com/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
 
-    private class MyTextWatcher implements TextWatcher {
+            APIService service = retrofit.create(APIService.class);
 
-        private View view;
+            HashMap<String, String> map = new HashMap();
+            map.put("email", email);
+            map.put("password", password);
+            Call<String> loginCall = service.login(map);
+            loginCall.enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    if(response.isSuccess()) {
 
-        private MyTextWatcher(View view) {
-            this.view = view;
-        }
+                    } else {
+                        Log.d("ERROR", response.code() + ": " + response.message());
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
 
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        }
-
-        public void afterTextChanged(Editable editable) {
-            switch (view.getId()) {
-                case R.id.login_input_email:
-                    validateEmail(login_input_email.getText().toString().trim());
-                    break;
-                case R.id.login_input_password:
-                    validatePassword(login_input_password.getText().toString());
-                    break;
-                default:
-                    break;
-            }
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Log.d("ERROR", t.toString());
+                }
+            });
         }
     }
 }
