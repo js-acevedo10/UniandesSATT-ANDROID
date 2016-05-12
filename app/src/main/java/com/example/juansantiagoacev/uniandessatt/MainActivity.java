@@ -19,7 +19,10 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import com.example.juansantiagoacev.uniandessatt.Fragments.AlertaFragment;
+import com.example.juansantiagoacev.uniandessatt.Fragments.dummy.DummyContent;
+
+public class MainActivity extends AppCompatActivity implements AlertaFragment.AlertaListFragmentInteractionListener{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -89,6 +92,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void AlertaFragmentInteraction(Alerta item) {
+
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -140,13 +148,13 @@ public class MainActivity extends AppCompatActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return null;
+                    return AlertaFragment.newInstance(position);
                 case 1:
-                    return null;
+                    return AlertaFragment.newInstance(position);
                 case 2:
-                    return null;
+                    return AlertaFragment.newInstance(position);
                 default:
-                    return null;
+                    return AlertaFragment.newInstance(position);
             }
         }
 

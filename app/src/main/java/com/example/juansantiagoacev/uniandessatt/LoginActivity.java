@@ -1,5 +1,6 @@
 package com.example.juansantiagoacev.uniandessatt;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,10 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.juansantiagoacev.uniandessatt.DAO.User;
+import com.example.juansantiagoacev.uniandessatt.StaticContent.UserRelated;
+import com.google.gson.JsonObject;
 
 import java.util.HashMap;
 
@@ -27,7 +32,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        prepareLayout();
+        if(UserRelated.getCurrentUser() != null) {
+            login();
+        } else {
+            prepareLayout();
+        }
     }
 
     public void prepareLayout() {
@@ -69,12 +78,18 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void submitForm() {
-
+        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(false);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage(getString(R.string.login_progress));
+        progressDialog.show();
         String email = login_input_email.getText().toString().trim();
         String password = login_input_password.getText().toString();
         if(validateEmail(email) && validatePassword(password)) {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("https://uniandes-sattjs.herokuapp.com/")
+                    .baseUrl("https://uniandes-satt.herokuapp.com/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
@@ -83,25 +98,31 @@ public class LoginActivity extends AppCompatActivity {
             HashMap<String, String> map = new HashMap();
             map.put("email", email);
             map.put("password", password);
-            Call<String> loginCall = service.login(map);
-            loginCall.enqueue(new Callback<String>() {
+            Call<User> loginCall = service.login(map);
+            loginCall.enqueue(new Callback<User>() {
                 @Override
-                public void onResponse(Call<String> call, Response<String> response) {
+                public void onResponse(Call<User> call, Response<User> response) {
                     if(response.isSuccess()) {
-
+                        UserRelated.setCurrentUser(response.body());
+                        login();
                     } else {
-                        Log.d("ERROR", response.code() + ": " + response.message());
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
+                        Log.d("UNSUCCESS", response.code() + "");
                     }
+                    progressDialog.dismiss();
                 }
 
                 @Override
-                public void onFailure(Call<String> call, Throwable t) {
-                    Log.d("ERROR", t.toString());
+                public void onFailure(Call<User> call, Throwable t) {
+                    t.printStackTrace();
+                    progressDialog.dismiss();
                 }
             });
         }
+    }
+
+    public void login() {
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

@@ -1,11 +1,16 @@
 package com.example.juansantiagoacev.uniandessatt;
 
+import com.example.juansantiagoacev.uniandessatt.DAO.User;
+import com.google.gson.JsonObject;
+
 import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 
 /**
@@ -22,11 +27,11 @@ public interface APIService {
     Call<List<Sensor>> loadSensores();
 
     @GET("alertas")
-    Call<List<Alerta>> loadAlertas();
+    Call<List<Alerta>> loadAlertas(@Header("Authorization") String authorization);
 
     @POST("eventos")
     Call<Evento> postEvento();
 
     @POST("auth")
-    Call<String> login(@Body HashMap<String, String> json);
+    Call<User> login(@Body HashMap<String, String> json);
 }

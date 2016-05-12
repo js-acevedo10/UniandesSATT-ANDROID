@@ -8,4 +8,6 @@
     <string name="login_hint_password">Contraseña</string>
     <string name="login_err_email">Correo Inválido</string>
     <string name="login_err_password">Contraseña Inválida</string>
+
+    <string name="login_progress">Iniciando Sesión</string>
 </resources>
