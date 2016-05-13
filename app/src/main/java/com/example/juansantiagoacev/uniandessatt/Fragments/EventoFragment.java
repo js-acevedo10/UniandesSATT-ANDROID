@@ -1,5 +1,6 @@
 package com.example.juansantiagoacev.uniandessatt.Fragments;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,9 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.juansantiagoacev.uniandessatt.APIService;
-import com.example.juansantiagoacev.uniandessatt.DTO.Alerta;
-import com.example.juansantiagoacev.uniandessatt.R;
+import com.example.juansantiagoacev.uniandessatt.DTO.Evento;
 import com.example.juansantiagoacev.uniandessatt.Helpers.UserHelper;
+import com.example.juansantiagoacev.uniandessatt.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,28 +28,28 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A fragment representing a list of Items.
- * <p>
- * Activities containing this fragment MUST implement the {@link AlertaListFragmentInteractionListener}
+ * <p/>
+ * Activities containing this fragment MUST implement the {@link EventoListFragmentInteractionListener}
  * interface.
  */
-public class AlertaFragment extends Fragment {
+public class EventoFragment extends Fragment {
 
-    private MyAlertaRecyclerViewAdapter myAlertaRecyclerViewAdapter;
-    private List<Alerta> alertaList = new ArrayList();
+    private MyEventoRecyclerViewAdapter myEventoRecyclerViewAdapter;
+    private List<Evento> eventoList = new ArrayList();
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-    private AlertaListFragmentInteractionListener mListener;
+    private EventoListFragmentInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public AlertaFragment() {
+    public EventoFragment() {
     }
 
     @SuppressWarnings("unused")
-    public static AlertaFragment newInstance(int columnCount) {
-        AlertaFragment fragment = new AlertaFragment();
+    public static EventoFragment newInstance(int columnCount) {
+        EventoFragment fragment = new EventoFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -63,7 +64,7 @@ public class AlertaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_alerta_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_evento_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -74,9 +75,9 @@ public class AlertaFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            myAlertaRecyclerViewAdapter = new MyAlertaRecyclerViewAdapter(alertaList, mListener);
-            recyclerView.setAdapter(myAlertaRecyclerViewAdapter);
-            getAlertas();
+            myEventoRecyclerViewAdapter = new MyEventoRecyclerViewAdapter(eventoList, mListener);
+            recyclerView.setAdapter(myEventoRecyclerViewAdapter);
+            getEventos();
         }
         return view;
     }
@@ -84,11 +85,11 @@ public class AlertaFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof AlertaListFragmentInteractionListener) {
-            mListener = (AlertaListFragmentInteractionListener) context;
+        if (context instanceof EventoListFragmentInteractionListener) {
+            mListener = (EventoListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement AlertaListFragmentInteractionListener");
+                    + " must implement EventoListFragmentInteractionListener");
         }
     }
 
@@ -98,30 +99,39 @@ public class AlertaFragment extends Fragment {
         mListener = null;
     }
 
-    public void getAlertas() {
+    public void getEventos() {
+        final ProgressDialog progressDialog = new ProgressDialog(getContext());
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(false);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage(getString(R.string.login_progress));
+        progressDialog.show();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://uniandes-satt.herokuapp.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         APIService service = retrofit.create(APIService.class);
 
-        Call<List<Alerta>> call;
-        call = service.loadAlertas(UserHelper.getCurrentUser().getAccessToken());
-        call.enqueue(new Callback<List<Alerta>>() {
+        Call<List<Evento>> call;
+        call = service.loadEventos(UserHelper.getCurrentUser().getAccessToken());
+        call.enqueue(new Callback<List<Evento>>() {
             @Override
-            public void onResponse(Call<List<Alerta>> call, Response<List<Alerta>> response) {
+            public void onResponse(Call<List<Evento>> call, Response<List<Evento>> response) {
                 if(response.isSuccess()) {
                     Log.d("SUCCESS", response.body().toString());
-                    alertaList = response.body();
-                    myAlertaRecyclerViewAdapter.notifyDataSetChanged();
+                    eventoList = response.body();
+                    myEventoRecyclerViewAdapter.notifyDataSetChanged();
                 } else {
                     Log.d("UNSUCCESS", response.code() + " - " + response.message().toString());
                 }
+                progressDialog.dismiss();
             }
 
             @Override
-            public void onFailure(Call<List<Alerta>> call, Throwable t) {
+            public void onFailure(Call<List<Evento>> call, Throwable t) {
                 t.printStackTrace();
+                progressDialog.dismiss();
             }
         });
     }
@@ -131,12 +141,12 @@ public class AlertaFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface AlertaListFragmentInteractionListener {
-        void AlertaFragmentInteraction(Alerta item);
+    public interface EventoListFragmentInteractionListener {
+        void onEventoListFragmentInteraction(Evento item);
     }
 }

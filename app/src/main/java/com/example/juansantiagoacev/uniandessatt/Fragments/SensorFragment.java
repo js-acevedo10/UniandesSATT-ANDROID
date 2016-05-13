@@ -13,8 +13,9 @@ import android.view.ViewGroup;
 
 import com.example.juansantiagoacev.uniandessatt.APIService;
 import com.example.juansantiagoacev.uniandessatt.DTO.Alerta;
-import com.example.juansantiagoacev.uniandessatt.R;
+import com.example.juansantiagoacev.uniandessatt.DTO.Sensor;
 import com.example.juansantiagoacev.uniandessatt.Helpers.UserHelper;
+import com.example.juansantiagoacev.uniandessatt.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,28 +28,28 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A fragment representing a list of Items.
- * <p>
- * Activities containing this fragment MUST implement the {@link AlertaListFragmentInteractionListener}
+ * <p/>
+ * Activities containing this fragment MUST implement the {@link SensorListFragmentInteractionListener}
  * interface.
  */
-public class AlertaFragment extends Fragment {
+public class SensorFragment extends Fragment {
 
-    private MyAlertaRecyclerViewAdapter myAlertaRecyclerViewAdapter;
-    private List<Alerta> alertaList = new ArrayList();
+    private MySensorRecyclerViewAdapter mySensorRecyclerViewAdapter;
+    private List<Sensor> sensorList = new ArrayList();
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
-    private AlertaListFragmentInteractionListener mListener;
+    private SensorListFragmentInteractionListener mListener;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public AlertaFragment() {
+    public SensorFragment() {
     }
 
     @SuppressWarnings("unused")
-    public static AlertaFragment newInstance(int columnCount) {
-        AlertaFragment fragment = new AlertaFragment();
+    public static SensorFragment newInstance(int columnCount) {
+        SensorFragment fragment = new SensorFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
@@ -63,7 +64,7 @@ public class AlertaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_alerta_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_sensor_list, container, false);
 
         // Set the adapter
         if (view instanceof RecyclerView) {
@@ -74,9 +75,9 @@ public class AlertaFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            myAlertaRecyclerViewAdapter = new MyAlertaRecyclerViewAdapter(alertaList, mListener);
-            recyclerView.setAdapter(myAlertaRecyclerViewAdapter);
-            getAlertas();
+            mySensorRecyclerViewAdapter = new MySensorRecyclerViewAdapter(sensorList, mListener);
+            recyclerView.setAdapter(mySensorRecyclerViewAdapter);
+            getSensores();
         }
         return view;
     }
@@ -84,11 +85,11 @@ public class AlertaFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof AlertaListFragmentInteractionListener) {
-            mListener = (AlertaListFragmentInteractionListener) context;
+        if (context instanceof SensorListFragmentInteractionListener) {
+            mListener = (SensorListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement AlertaListFragmentInteractionListener");
+                    + " must implement SensorListFragmentInteractionListener");
         }
     }
 
@@ -98,29 +99,29 @@ public class AlertaFragment extends Fragment {
         mListener = null;
     }
 
-    public void getAlertas() {
+    public void getSensores() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://uniandes-satt.herokuapp.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         APIService service = retrofit.create(APIService.class);
 
-        Call<List<Alerta>> call;
-        call = service.loadAlertas(UserHelper.getCurrentUser().getAccessToken());
-        call.enqueue(new Callback<List<Alerta>>() {
+        Call<List<Sensor>> call;
+        call = service.loadSensores(UserHelper.getCurrentUser().getAccessToken());
+        call.enqueue(new Callback<List<Sensor>>() {
             @Override
-            public void onResponse(Call<List<Alerta>> call, Response<List<Alerta>> response) {
+            public void onResponse(Call<List<Sensor>> call, Response<List<Sensor>> response) {
                 if(response.isSuccess()) {
                     Log.d("SUCCESS", response.body().toString());
-                    alertaList = response.body();
-                    myAlertaRecyclerViewAdapter.notifyDataSetChanged();
+                    sensorList = response.body();
+                    mySensorRecyclerViewAdapter.notifyDataSetChanged();
                 } else {
                     Log.d("UNSUCCESS", response.code() + " - " + response.message().toString());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<Alerta>> call, Throwable t) {
+            public void onFailure(Call<List<Sensor>> call, Throwable t) {
                 t.printStackTrace();
             }
         });
@@ -131,12 +132,12 @@ public class AlertaFragment extends Fragment {
      * fragment to allow an interaction in this fragment to be communicated
      * to the activity and potentially other fragments contained in that
      * activity.
-     * <p>
+     * <p/>
      * See the Android Training lesson <a href=
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface AlertaListFragmentInteractionListener {
-        void AlertaFragmentInteraction(Alerta item);
+    public interface SensorListFragmentInteractionListener {
+        void onSensorListFragmentInteraction(Sensor item);
     }
 }

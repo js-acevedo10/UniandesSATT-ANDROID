@@ -9,11 +9,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.example.juansantiagoacev.uniandessatt.DAO.User;
-import com.example.juansantiagoacev.uniandessatt.StaticContent.UserRelated;
-import com.google.gson.JsonObject;
+import com.example.juansantiagoacev.uniandessatt.DTO.User;
+import com.example.juansantiagoacev.uniandessatt.Helpers.UserHelper;
 
 import java.util.HashMap;
 
@@ -32,7 +30,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        if(UserRelated.getCurrentUser() != null) {
+        if(UserHelper.getCurrentUser() != null) {
             login();
         } else {
             prepareLayout();
@@ -103,7 +101,7 @@ public class LoginActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<User> call, Response<User> response) {
                     if(response.isSuccess()) {
-                        UserRelated.setCurrentUser(response.body());
+                        UserHelper.setCurrentUser(response.body());
                         login();
                     } else {
                         Log.d("UNSUCCESS", response.code() + "");

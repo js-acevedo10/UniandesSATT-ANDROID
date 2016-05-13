@@ -6,29 +6,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.juansantiagoacev.uniandessatt.DTO.Alerta;
+import com.example.juansantiagoacev.uniandessatt.DTO.Evento;
 import com.example.juansantiagoacev.uniandessatt.R;
 
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link } and makes a call to the
- * specified {@link com.example.juansantiagoacev.uniandessatt.Fragments.AlertaFragment.AlertaListFragmentInteractionListener}.
+ * {@link RecyclerView.Adapter} that can display a {@link Evento} and makes a call to the
+ * specified {@link com.example.juansantiagoacev.uniandessatt.Fragments.EventoFragment.EventoListFragmentInteractionListener}.
  */
-public class MyAlertaRecyclerViewAdapter extends RecyclerView.Adapter<MyAlertaRecyclerViewAdapter.ViewHolder> {
+public class MyEventoRecyclerViewAdapter extends RecyclerView.Adapter<MyEventoRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Alerta> mValues;
-    private final AlertaFragment.AlertaListFragmentInteractionListener mListener;
+    private final List<Evento> mValues;
+    private final EventoFragment.EventoListFragmentInteractionListener mListener;
 
-    public MyAlertaRecyclerViewAdapter(List<Alerta> alertaList, AlertaFragment.AlertaListFragmentInteractionListener listener) {
-        mValues = alertaList;
+    public MyEventoRecyclerViewAdapter(List<Evento> items, EventoFragment.EventoListFragmentInteractionListener listener) {
+        mValues = items;
         mListener = listener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_alerta, parent, false);
+                .inflate(R.layout.fragment_evento, parent, false);
         return new ViewHolder(view);
     }
 
@@ -44,7 +44,7 @@ public class MyAlertaRecyclerViewAdapter extends RecyclerView.Adapter<MyAlertaRe
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
-                    mListener.AlertaFragmentInteraction(holder.mItem);
+                    mListener.onEventoListFragmentInteraction(holder.mItem);
                 }
             }
         });
@@ -59,7 +59,7 @@ public class MyAlertaRecyclerViewAdapter extends RecyclerView.Adapter<MyAlertaRe
         public final View mView;
         public final TextView mIdView;
         public final TextView mContentView;
-        public Alerta mItem;
+        public Evento mItem;
 
         public ViewHolder(View view) {
             super(view);

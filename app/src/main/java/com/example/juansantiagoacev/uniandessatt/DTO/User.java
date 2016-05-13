@@ -1,4 +1,4 @@
-package com.example.juansantiagoacev.uniandessatt.DAO;
+package com.example.juansantiagoacev.uniandessatt.DTO;
 
 /**
  * Created by juansantiagoacev on 5/11/16.

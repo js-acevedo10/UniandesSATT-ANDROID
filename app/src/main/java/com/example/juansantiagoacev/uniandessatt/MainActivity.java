@@ -19,8 +19,10 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.example.juansantiagoacev.uniandessatt.DTO.Alerta;
 import com.example.juansantiagoacev.uniandessatt.Fragments.AlertaFragment;
-import com.example.juansantiagoacev.uniandessatt.Fragments.dummy.DummyContent;
+import com.example.juansantiagoacev.uniandessatt.Fragments.EventoFragment;
+import com.example.juansantiagoacev.uniandessatt.Fragments.SensorFragment;
 
 public class MainActivity extends AppCompatActivity implements AlertaFragment.AlertaListFragmentInteractionListener{
 
@@ -66,9 +68,7 @@ public class MainActivity extends AppCompatActivity implements AlertaFragment.Al
                         .setAction("Action", null).show();
             }
         });
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements AlertaFragment.Al
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -148,13 +147,13 @@ public class MainActivity extends AppCompatActivity implements AlertaFragment.Al
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return AlertaFragment.newInstance(position);
+                    return EventoFragment.newInstance(1);
                 case 1:
-                    return AlertaFragment.newInstance(position);
+                    return AlertaFragment.newInstance(1);
                 case 2:
-                    return AlertaFragment.newInstance(position);
+                    return SensorFragment.newInstance(1);
                 default:
-                    return AlertaFragment.newInstance(position);
+                    return AlertaFragment.newInstance(1);
             }
         }
 

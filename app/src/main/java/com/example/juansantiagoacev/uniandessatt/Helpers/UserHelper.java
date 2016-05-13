@@ -1,11 +1,11 @@
-package com.example.juansantiagoacev.uniandessatt.StaticContent;
+package com.example.juansantiagoacev.uniandessatt.Helpers;
 
-import com.example.juansantiagoacev.uniandessatt.DAO.User;
+import com.example.juansantiagoacev.uniandessatt.DTO.User;
 
 /**
  * Created by juansantiagoacev on 5/11/16.
  */
-public class UserRelated {
+public class UserHelper {
 
     public static User currentUser;
 
@@ -14,6 +14,6 @@ public class UserRelated {
     }
 
     public static void setCurrentUser(User currentUser) {
-        UserRelated.currentUser = currentUser;
+        UserHelper.currentUser = currentUser;
     }
 }
