@@ -1,5 +1,6 @@
 package com.example.juansantiagoacev.uniandessatt;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,20 +12,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.juansantiagoacev.uniandessatt.DTO.Alerta;
+import com.example.juansantiagoacev.uniandessatt.DTO.Evento;
 import com.example.juansantiagoacev.uniandessatt.Fragments.AlertaFragment;
 import com.example.juansantiagoacev.uniandessatt.Fragments.EventoFragment;
-import com.example.juansantiagoacev.uniandessatt.Fragments.SensorFragment;
+import com.example.juansantiagoacev.uniandessatt.Helpers.UserHelper;
+import com.malinskiy.materialicons.IconDrawable;
+import com.malinskiy.materialicons.Iconify;
 
-public class MainActivity extends AppCompatActivity implements AlertaFragment.AlertaListFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements AlertaFragment.AlertaListFragmentInteractionListener, EventoFragment.EventoListFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements AlertaFragment.Al
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private FloatingActionButton fab;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -56,11 +59,33 @@ public class MainActivity extends AppCompatActivity implements AlertaFragment.Al
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 0) {
+                    fab.show();
+                } else {
+                    fab.hide();
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setImageDrawable(new IconDrawable(this, Iconify.IconValue.zmdi_plus)
+                .colorRes(android.R.color.white));
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,42 +118,15 @@ public class MainActivity extends AppCompatActivity implements AlertaFragment.Al
 
     @Override
     public void AlertaFragmentInteraction(Alerta item) {
-
+        Toast.makeText(MainActivity.this, item.toString(), Toast.LENGTH_SHORT).show();
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
+    @Override
+    public void onEventoListFragmentInteraction(Evento item) {
+        Toast.makeText(MainActivity.this, item.toString(), Toast.LENGTH_SHORT).show();
+        UserHelper.setSelectedEvento(item);
+        Intent intent = new Intent(getApplicationContext(), EventoMapActivity.class);
+        startActivity(intent);
     }
 
     /**
@@ -147,20 +145,18 @@ public class MainActivity extends AppCompatActivity implements AlertaFragment.Al
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return EventoFragment.newInstance(1);
+                    return new EventoFragment();
                 case 1:
-                    return AlertaFragment.newInstance(1);
-                case 2:
-                    return SensorFragment.newInstance(1);
+                    return new AlertaFragment();
                 default:
-                    return AlertaFragment.newInstance(1);
+                    return null;
             }
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            // Show 2 total pages.
+            return 2;
         }
 
         @Override
@@ -170,8 +166,6 @@ public class MainActivity extends AppCompatActivity implements AlertaFragment.Al
                     return "EVENTOS";
                 case 1:
                     return "ALERTAS";
-                case 2:
-                    return "SENSORES";
             }
             return null;
         }

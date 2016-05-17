@@ -35,7 +35,7 @@ public class MyEventoRecyclerViewAdapter extends RecyclerView.Adapter<MyEventoRe
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(position+"");
+        holder.mIdView.setText(position+1+"");
         holder.mContentView.setText(mValues.get(position).toString());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -50,9 +50,21 @@ public class MyEventoRecyclerViewAdapter extends RecyclerView.Adapter<MyEventoRe
         });
     }
 
+    public void updateDataset(List<Evento> eventos) {
+        mValues.clear();
+        mValues.addAll(eventos);
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return mValues.size();
+    }
+
+    public void setFilter(List<Evento> eventosFilter) {
+        mValues.clear();
+        mValues.addAll(eventosFilter);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -64,8 +76,8 @@ public class MyEventoRecyclerViewAdapter extends RecyclerView.Adapter<MyEventoRe
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = (TextView) view.findViewById(R.id.id_evento);
+            mContentView = (TextView) view.findViewById(R.id.content_evento);
         }
 
         @Override

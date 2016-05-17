@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -85,6 +86,8 @@ public class LoginActivity extends AppCompatActivity {
         progressDialog.show();
         String email = login_input_email.getText().toString().trim();
         String password = login_input_password.getText().toString();
+        byte[] pasData = password.getBytes();
+        password = Base64.encodeToString(pasData, Base64.DEFAULT).trim();
         if(validateEmail(email) && validatePassword(password)) {
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl("https://uniandes-satt.herokuapp.com/")
@@ -104,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                         UserHelper.setCurrentUser(response.body());
                         login();
                     } else {
-                        Log.d("UNSUCCESS", response.code() + "");
+                        Log.d("UNSUCCESS", response.code() + " - " + response.toString());
                     }
                     progressDialog.dismiss();
                 }

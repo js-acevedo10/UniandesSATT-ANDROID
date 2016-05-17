@@ -19,8 +19,6 @@ import retrofit2.http.POST;
  */
 public interface APIService {
 
-    public String baseUrl = "https://uniandes-satt.herokuapp.com";
-
     @GET("eventos")
     Call<List<Evento>> loadEventos(@Header("Authorization") String authorization);
 

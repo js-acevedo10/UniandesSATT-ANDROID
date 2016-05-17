@@ -35,7 +35,7 @@ public class MyAlertaRecyclerViewAdapter extends RecyclerView.Adapter<MyAlertaRe
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(position+"");
+        holder.mIdView.setText(position+1+"");
         holder.mContentView.setText(mValues.get(position).toString());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -48,6 +48,12 @@ public class MyAlertaRecyclerViewAdapter extends RecyclerView.Adapter<MyAlertaRe
                 }
             }
         });
+    }
+
+    public void updateDataset(List<Alerta> alertas) {
+        mValues.clear();
+        mValues.addAll(alertas);
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -64,8 +70,8 @@ public class MyAlertaRecyclerViewAdapter extends RecyclerView.Adapter<MyAlertaRe
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = (TextView) view.findViewById(R.id.id_alerta);
+            mContentView = (TextView) view.findViewById(R.id.content_alerta);
         }
 
         @Override

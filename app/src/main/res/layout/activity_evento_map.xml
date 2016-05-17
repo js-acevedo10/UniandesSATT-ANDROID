@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.juansantiagoacev.uniandessatt.EventoMapActivity">
+
+    <ImageView
+        android:id="@+id/evento_imagen_map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccent"
+        app:layout_heightPercent="50%"/>
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/evento_layout_latitud"
+        android:layout_below="@+id/evento_imagen_map"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_heightPercent="10%"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:background="?attr/selectableItemBackground">
+
+        <TextView
+            android:id="@+id/evento_text_lat_static"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Base.TextAppearance.AppCompat.Medium"
+            app:layout_widthPercent="50%"
+            android:text="Latitud"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/evento_text_lat_dynamic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Base.TextAppearance.AppCompat.Medium"
+            app:layout_widthPercent="50%"
+            android:layout_toRightOf="@+id/evento_text_lat_static"
+            android:text="10.24574833"
+            android:layout_centerVertical="true"/>
+
+    </android.support.percent.PercentRelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black"
+        android:layout_below="@+id/evento_layout_latitud"/>
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/evento_layout_longitud"
+        android:layout_below="@+id/evento_layout_latitud"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_heightPercent="10%"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:background="?attr/selectableItemBackground">
+
+        <TextView
+            android:id="@+id/evento_text_lng_static"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Base.TextAppearance.AppCompat.Medium"
+            app:layout_widthPercent="50%"
+            android:text="Longitud"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/evento_text_lng_dynamic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Base.TextAppearance.AppCompat.Medium"
+            app:layout_widthPercent="50%"
+            android:layout_toRightOf="@+id/evento_text_lng_static"
+            android:text="10.24574833"
+            android:layout_centerVertical="true"/>
+
+    </android.support.percent.PercentRelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/black"
+        android:layout_below="@+id/evento_layout_longitud"/>
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_below="@+id/evento_layout_longitud"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_heightPercent="10%"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:background="?attr/selectableItemBackground">
+
+        <TextView
+            android:id="@+id/evento_text_dis_static"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Base.TextAppearance.AppCompat.Medium"
+            app:layout_widthPercent="50%"
+            android:text="Distancia"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/evento_text_dis_dynamic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Base.TextAppearance.AppCompat.Medium"
+            app:layout_widthPercent="50%"
+            android:layout_toRightOf="@+id/evento_text_dis_static"
+            android:text="10.24574833"
+            android:layout_centerVertical="true"/>
+
+    </android.support.percent.PercentRelativeLayout>
+
+</android.support.percent.PercentRelativeLayout>

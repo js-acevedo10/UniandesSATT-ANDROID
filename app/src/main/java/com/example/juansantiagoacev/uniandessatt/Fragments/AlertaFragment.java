@@ -33,11 +33,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class AlertaFragment extends Fragment {
 
-    private MyAlertaRecyclerViewAdapter myAlertaRecyclerViewAdapter;
     private List<Alerta> alertaList = new ArrayList();
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private AlertaListFragmentInteractionListener mListener;
+    private MyAlertaRecyclerViewAdapter myAlertaRecyclerViewAdapter = new MyAlertaRecyclerViewAdapter(alertaList, mListener);
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -58,6 +58,7 @@ public class AlertaFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getAlertas();
     }
 
     @Override
@@ -76,7 +77,6 @@ public class AlertaFragment extends Fragment {
             }
             myAlertaRecyclerViewAdapter = new MyAlertaRecyclerViewAdapter(alertaList, mListener);
             recyclerView.setAdapter(myAlertaRecyclerViewAdapter);
-            getAlertas();
         }
         return view;
     }
@@ -111,11 +111,11 @@ public class AlertaFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Alerta>> call, Response<List<Alerta>> response) {
                 if(response.isSuccess()) {
-                    Log.d("SUCCESS", response.body().toString());
+                    Log.d("ALERTAS SUCCESS", response.body().toString());
                     alertaList = response.body();
-                    myAlertaRecyclerViewAdapter.notifyDataSetChanged();
+                    myAlertaRecyclerViewAdapter.updateDataset(alertaList);
                 } else {
-                    Log.d("UNSUCCESS", response.code() + " - " + response.message().toString());
+                    Log.d("ALERTAS UNSUCCESS", response.code() + " - " + response.message().toString());
                 }
             }
 

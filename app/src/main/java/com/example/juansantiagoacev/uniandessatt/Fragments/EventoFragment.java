@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,13 +33,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Activities containing this fragment MUST implement the {@link EventoListFragmentInteractionListener}
  * interface.
  */
-public class EventoFragment extends Fragment {
+public class EventoFragment extends Fragment implements SearchView.OnQueryTextListener {
 
     private MyEventoRecyclerViewAdapter myEventoRecyclerViewAdapter;
     private List<Evento> eventoList = new ArrayList();
     private static final String ARG_COLUMN_COUNT = "column-count";
     private int mColumnCount = 1;
     private EventoListFragmentInteractionListener mListener;
+    private static ProgressDialog progressDialog;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -59,6 +61,14 @@ public class EventoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setIndeterminate(false);
+        progressDialog.setCancelable(false);
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage("Descargando Información");
+        progressDialog.show();
+        getEventos();
     }
 
     @Override
@@ -77,7 +87,6 @@ public class EventoFragment extends Fragment {
             }
             myEventoRecyclerViewAdapter = new MyEventoRecyclerViewAdapter(eventoList, mListener);
             recyclerView.setAdapter(myEventoRecyclerViewAdapter);
-            getEventos();
         }
         return view;
     }
@@ -100,13 +109,6 @@ public class EventoFragment extends Fragment {
     }
 
     public void getEventos() {
-        final ProgressDialog progressDialog = new ProgressDialog(getContext());
-        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        progressDialog.setIndeterminate(false);
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        progressDialog.setMessage(getString(R.string.login_progress));
-        progressDialog.show();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://uniandes-satt.herokuapp.com/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -119,11 +121,11 @@ public class EventoFragment extends Fragment {
             @Override
             public void onResponse(Call<List<Evento>> call, Response<List<Evento>> response) {
                 if(response.isSuccess()) {
-                    Log.d("SUCCESS", response.body().toString());
+                    Log.d("EVENTOS SUCCESS", response.body().toString());
                     eventoList = response.body();
-                    myEventoRecyclerViewAdapter.notifyDataSetChanged();
+                    myEventoRecyclerViewAdapter.updateDataset(eventoList);
                 } else {
-                    Log.d("UNSUCCESS", response.code() + " - " + response.message().toString());
+                    Log.d("EVENTOS UNSUCCESS", response.code() + " - " + response.message().toString());
                 }
                 progressDialog.dismiss();
             }
@@ -134,6 +136,29 @@ public class EventoFragment extends Fragment {
                 progressDialog.dismiss();
             }
         });
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        final List<Evento> modelResult = filter(eventoList, newText);
+        myEventoRecyclerViewAdapter.setFilter(modelResult);
+        return true;
+    }
+
+    private List<Evento> filter(List<Evento> model, String query) {
+        final List<Evento> modelResult = new ArrayList();
+        for(int i = model.size()-1; i >= 0; i--) {
+            final String text = model.get(i).toString().toLowerCase();
+            if(text.contains(query.toLowerCase())) {
+                modelResult.add(model.get(i));
+            }
+        }
+        return modelResult;
     }
 
     /**
