@@ -2,7 +2,15 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< Updated upstream
       <module fileurl="file://$PROJECT_DIR$/UniandesSATT-ANDROID.iml" filepath="$PROJECT_DIR$/UniandesSATT-ANDROID.iml" />
+=======
+<<<<<<< HEAD
+      <module fileurl="file://$PROJECT_DIR$/UniandesSATT.iml" filepath="$PROJECT_DIR$/UniandesSATT.iml" />
+=======
+      <module fileurl="file://$PROJECT_DIR$/UniandesSATT-ANDROID.iml" filepath="$PROJECT_DIR$/UniandesSATT-ANDROID.iml" />
+>>>>>>> origin/master
+>>>>>>> Stashed changes
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

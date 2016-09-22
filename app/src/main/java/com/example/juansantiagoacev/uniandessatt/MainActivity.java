@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements AlertaFragment.Al
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Create Snackbar", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -121,6 +121,11 @@ public class MainActivity extends AppCompatActivity implements AlertaFragment.Al
         Toast.makeText(MainActivity.this, item.toString(), Toast.LENGTH_SHORT).show();
     }
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> Stashed changes
     @Override
     public void onEventoListFragmentInteraction(Evento item) {
         Toast.makeText(MainActivity.this, item.toString(), Toast.LENGTH_SHORT).show();
@@ -129,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements AlertaFragment.Al
         startActivity(intent);
     }
 
+>>>>>>> origin/master
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
